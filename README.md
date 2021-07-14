@@ -1,4 +1,4 @@
 # EthChecker
-'''Bash
+```Bash
 sudo apt-get install python3-pip
-'''
+```
