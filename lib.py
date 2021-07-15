@@ -10,7 +10,6 @@ import smtplib
 
 def startPing():
     ETHs = interfaces()
-    gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
     try:
         os.mkdir("/root/check_test")
     except:
@@ -19,7 +18,7 @@ def startPing():
 
         PING_STATUS = False
         for eth in[item for item in ETHs if len(item) >= 3]:
-            Thread(target=ping, args=(eth, gmail,)).start()
+            Thread(target=ping, args=(eth, )).start()
         print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
         if PING_STATUS:
@@ -30,7 +29,7 @@ def startPing():
             sleep(50)
 
 
-def ping(eth, gmail, server='google.com', count=3):
+def ping(eth, server='google.com', count=3):
     command = "ping -c {} -I {} {}".format(count, eth, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
@@ -52,7 +51,8 @@ def ping(eth, gmail, server='google.com', count=3):
             global PING_STATUS
             PING_STATUS = True
         elif countLoss == 60:
-            gmail.send_message('asd', eth)
+            gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
+            gmail.send_message('', eth)
         elif countLoss > 60:
             os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
 
@@ -79,11 +79,8 @@ class Gmail(object):
 
     def send_message(self, subject, eth):
         headers = [
-            "From: " + self.email,
             "Subject: " + f"ПК - '{platform.node()}'"+'\n'+f"Сетевой интерфейс '{eth}' недоступен!",
-            "To: " + self.email,
-            "MIME-Version: 1.0",
-           "Content-Type: text/html"]
+            ]
         headers = "\r\n".join(headers)
         self.session.sendmail(self.email, self.email, (headers + "\r\n\r\n" + f"Сетевой интерфейс '{eth}' недоступен!").encode('utf-8'))
 
@@ -151,3 +148,7 @@ def rebootEth(self: Send, serial):
 @Send
 def arduino(self: Send, serial, data):
     self.write(serial, data)
+
+if __name__ == '__main__':
+    gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
+    gmail.send_message("", "TEST")
