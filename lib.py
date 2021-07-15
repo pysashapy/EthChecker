@@ -19,8 +19,10 @@ def startPing():
         PING_STATUS = False
         for eth in[item for item in ETHs if len(item) >= 3]:
             Thread(target=ping, args=(eth, gmail,)).start()
+        print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
         if PING_STATUS:
+            print("[INFO] RESTART ETH!")
             restartEth()
             sleep(30)
         else:
@@ -28,11 +30,12 @@ def startPing():
 
 
 def ping(eth, gmail, server='google.com', count=3):
-    cmd = "ping -c {} -I {} {}".format(count, eth, server).split(' ')
+    command = "ping -c {} -I {} {}".format(count, eth, server)
+    cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
     lines = output.split("\n")
     loss = int(lines[-3].split(',')[2].split()[0][:-1])
-
+    print(f"[INFO] command - ", command, f" loss - {loss}")
     if loss == 100:
         try:
             countLoss = int(open(f"/root/check_test/{eth}_state", "r").read())
