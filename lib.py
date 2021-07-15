@@ -16,6 +16,7 @@ def startPing():
     except:
         pass
     while True:
+
         PING_STATUS = False
         for eth in[item for item in ETHs if len(item) >= 3]:
             Thread(target=ping, args=(eth, gmail,)).start()
@@ -35,7 +36,6 @@ def ping(eth, gmail, server='google.com', count=3):
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
     lines = output.split("\n")
     loss = int(lines[-3].split(',')[2].split()[0][:-1])
-    print(f"[INFO] command - ", command, f" loss - {loss}")
     if loss == 100:
         try:
             countLoss = int(open(f"/root/check_test/{eth}_state", "r").read())
@@ -44,6 +44,8 @@ def ping(eth, gmail, server='google.com', count=3):
 
         fail = open(f"/root/check_test/{eth}_state", "w")
         countLoss += 1
+        print(f"[INFO] command - ", command, f" loss - {loss}", f" count Loss {countLoss}")
+
         fail.write(str(countLoss))
         fail.close()
         if countLoss == 10:
@@ -56,6 +58,7 @@ def ping(eth, gmail, server='google.com', count=3):
 
     else:
         try:
+            print(f"[INFO] command - ", command, f" loss - {loss}")
             os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
         except:
             pass
