@@ -44,7 +44,7 @@ def ping(eth, gmail, server='google.com', count=3):
 
         fail = open(f"/root/check_test/{eth}_state", "w")
         countLoss += 1
-        print(f"[INFO] command - ", command, f" loss - {loss}", f" count Loss {countLoss}")
+        print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
 
         fail.write(str(countLoss))
         fail.close()
@@ -58,7 +58,7 @@ def ping(eth, gmail, server='google.com', count=3):
 
     else:
         try:
-            print(f"[INFO] command - ", command, f" loss - {loss}")
+            print(f"[INFO] command - ", command, f", loss - {loss}")
             os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
         except:
             pass
