@@ -2,14 +2,15 @@ import serial
 from time import sleep
 import os
 import subprocess
-from get_nic.getnic import interfaces
+from get_nic.getnic import *
 from threading import Thread
 import platform
 import smtplib
 
 
 def startPing():
-    ETHs = interfaces()
+    ETHS = ipaddr([item for item in interfaces() if len(item) >= 3])
+    IPs = [ETHS[key]["inet4"][:-3] for key in ETHS.keys()]
     try:
         os.mkdir("/root/check_test")
     except:
@@ -17,8 +18,8 @@ def startPing():
     while True:
 
         PING_STATUS = False
-        for eth in[item for item in ETHs if len(item) >= 3]:
-            Thread(target=ping, args=(eth, )).start()
+        for ip in IPs:
+            Thread(target=ping, args=(ip, )).start()
         print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
         if PING_STATUS:
@@ -29,19 +30,19 @@ def startPing():
             sleep(50)
 
 
-def ping(eth, server='1.1.1.1', count=3):
-    command = "ping -c {} -I {} {}".format(count, eth, server)
+def ping(ip, server='1.1.1.1', count=3):
+    command = "ping -c {} -I {} {}".format(count, ip, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
     lines = output.split("\n")
     loss = int(lines[-3].split(',')[2].split()[0][:-1])
     if loss == 100:
         try:
-            countLoss = int(open(f"/root/check_test/{eth}_state", "r").read())
+            countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
         except:
             countLoss = 0
 
-        fail = open(f"/root/check_test/{eth}_state", "w")
+        fail = open(f"/root/check_test/{ip}_state", "w")
         countLoss += 1
         print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
 
@@ -52,13 +53,13 @@ def ping(eth, server='1.1.1.1', count=3):
             PING_STATUS = True
         elif countLoss == 60:
             gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
-            gmail.send_message('', eth)
-            os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
+            gmail.send_message('', ip)
+            os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
 
     else:
         try:
             print(f"[INFO] command - ", command, f", loss - {loss}")
-            os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
+            os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
         except:
             pass
 
