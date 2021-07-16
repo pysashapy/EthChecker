@@ -29,7 +29,7 @@ def startPing():
             sleep(50)
 
 
-def ping(eth, server='google.com', count=3):
+def ping(eth, server='1.1.1.1', count=3):
     command = "ping -c {} -I {} {}".format(count, eth, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
@@ -53,7 +53,6 @@ def ping(eth, server='google.com', count=3):
         elif countLoss == 60:
             gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
             gmail.send_message('', eth)
-        elif countLoss > 60:
             os.remove(os.path.join("/root/check_test/", f"{eth}_state"))
 
     else:
