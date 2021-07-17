@@ -37,7 +37,7 @@ def startPing():
     while True:
 
         PING_STATUS = False
-        for ip in IPs[1:]:
+        for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
         print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
@@ -50,6 +50,7 @@ def startPing():
 
 
 def ping(ip, server='1.1.1.1', count=3, ct=False):
+    print(ip)
     command = "ping -c {} -I {} {}".format(count, ip, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
@@ -67,7 +68,7 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
 
             fail = open(f"/root/check_test/{ip}_state", "w")
             countLoss += 1
-            print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
+            #print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
 
             fail.write(str(countLoss))
             fail.close()
