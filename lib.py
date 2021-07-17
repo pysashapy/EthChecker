@@ -9,8 +9,27 @@ import smtplib
 
 
 def startPing():
-    ETHS = ipaddr([item for item in interfaces() if len(item) >= 3])
-    IPs = [ETHS[key]["inet4"][:-3] for key in ETHS.keys()]
+    IPs = ['192.168.11.100',
+        '192.168.12.100',
+        '192.168.13.100',
+        '192.168.14.100',
+        '192.168.15.100',
+        '192.168.16.100',
+        '192.168.17.100',
+        '192.168.18.100',
+        '192.168.19.100',
+        '192.168.20.100',
+        '192.168.21.100',
+        '192.168.22.100',
+        '192.168.23.100',
+        '192.168.24.100',
+        '192.168.25.100',
+        '192.168.26.100',
+        '192.168.27.100',
+        '192.168.28.100',
+        '192.168.29.100',
+        '192.168.30.100'
+     ]
     try:
         os.mkdir("/root/check_test")
     except:
@@ -36,7 +55,10 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
     lines = output.split("\n")
     try:
-        loss = float(lines[-3].split(',')[2].split()[0][:-1])
+        try:
+            loss = float(lines[-3].split(',')[2].split()[0][:-1])
+        except:
+            loss = 100
         if loss == 100 and ct:
             try:
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
