@@ -81,6 +81,7 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
                 gmail.send_message('', ip)
                 os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
+            print(ip, 3)
         elif not ct and loss == 100:
             ping(ip, server, ct=True)
         else:
