@@ -64,7 +64,6 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
             except:
                 countLoss = 0
-            print(ip, 1)
 
             fail = open(f"/root/check_test/{ip}_state", "w")
             countLoss += 1
@@ -72,7 +71,6 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
 
             fail.write(str(countLoss))
             fail.close()
-            print(ip, 2)
 
             if countLoss == 10:
                 global PING_STATUS
@@ -81,7 +79,8 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
                 gmail.send_message('', ip)
                 os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
-            print(ip, 3)
+            print(f"[INFO] command - ", command, f", loss - {loss}, count loss - {countLoss}")
+
         elif not ct and loss == 100:
             ping(ip, server, ct=True)
         else:
