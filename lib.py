@@ -39,14 +39,14 @@ def startPing():
         PING_STATUS = False
         for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
-        sleep(10)
+        sleep(20)
         print("[INFO] SLEEPING 60 SECONDS!")
         if PING_STATUS:
             print("[INFO] RESTART ETH!")
             restartEth()
-            sleep(30)
+            sleep(20)
         else:
-            sleep(50)
+            sleep(40)
 
 
 def ping(ip, server='1.1.1.1', count=3, ct=False):
