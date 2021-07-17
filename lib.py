@@ -50,7 +50,6 @@ def startPing():
 
 
 def ping(ip, server='1.1.1.1', count=3, ct=False):
-    print(ip)
     command = "ping -c {} -I {} {}".format(count, ip, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
@@ -60,6 +59,7 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             loss = float(lines[-3].split(',')[2].split()[0][:-1])
         except:
             loss = 100
+        print(ip, loss)
         if loss == 100 and ct:
             try:
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
