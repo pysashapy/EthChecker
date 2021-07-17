@@ -39,8 +39,8 @@ def startPing():
         PING_STATUS = False
         for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
-        print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
+        print("[INFO] SLEEPING 60 SECONDS!")
         if PING_STATUS:
             print("[INFO] RESTART ETH!")
             restartEth()
