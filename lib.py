@@ -59,12 +59,12 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             loss = float(lines[-3].split(',')[2].split()[0][:-1])
         except:
             loss = 100
-        print(ip, loss)
         if loss == 100 and ct:
             try:
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
             except:
                 countLoss = 0
+            print(ip, 1)
 
             fail = open(f"/root/check_test/{ip}_state", "w")
             countLoss += 1
@@ -72,6 +72,8 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
 
             fail.write(str(countLoss))
             fail.close()
+            print(ip, 2)
+
             if countLoss == 10:
                 global PING_STATUS
                 PING_STATUS = True
