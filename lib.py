@@ -18,7 +18,7 @@ def startPing():
     while True:
 
         PING_STATUS = False
-        for ip in IPs:
+        for ip in IPs[1:]:
             Thread(target=ping, args=(ip, )).start()
         print("[INFO] SLEEPING 60 SECONDS!")
         sleep(10)
@@ -30,38 +30,42 @@ def startPing():
             sleep(50)
 
 
-def ping(ip, server='1.1.1.1', count=3):
+def ping(ip, server='1.1.1.1', count=3, ct=False):
     command = "ping -c {} -I {} {}".format(count, ip, server)
     cmd = command.split(' ')
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.read().decode()
     lines = output.split("\n")
-    loss = float(lines[-3].split(',')[2].split()[0][:-1])
-    if loss == 100:
-        try:
-            countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
-        except:
-            countLoss = 0
+    try:
+        loss = float(lines[-3].split(',')[2].split()[0][:-1])
+        if loss == 100 and ct:
+            try:
+                countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
+            except:
+                countLoss = 0
 
-        fail = open(f"/root/check_test/{ip}_state", "w")
-        countLoss += 1
-        print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
+            fail = open(f"/root/check_test/{ip}_state", "w")
+            countLoss += 1
+            print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
 
-        fail.write(str(countLoss))
-        fail.close()
-        if countLoss == 10:
-            global PING_STATUS
-            PING_STATUS = True
-        elif countLoss == 60:
-            gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
-            gmail.send_message('', ip)
-            os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
-
-    else:
-        try:
-            print(f"[INFO] command - ", command, f", loss - {loss}")
-            os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
-        except:
-            pass
+            fail.write(str(countLoss))
+            fail.close()
+            if countLoss == 10:
+                global PING_STATUS
+                PING_STATUS = True
+            elif countLoss == 60:
+                gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
+                gmail.send_message('', ip)
+                os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
+        elif not ct and loss == 100:
+            ping(ip, server, ct=True)
+        else:
+            try:
+                print(f"[INFO] command - ", command, f", loss - {loss}")
+                os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
+            except:
+                pass
+    except BaseException as e:
+        print(f"{'-'*49}\n[INFO] ERROR - {e};\n PING OUT - {output}")
 
 
 class Gmail(object):
