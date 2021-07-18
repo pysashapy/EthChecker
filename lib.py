@@ -37,10 +37,10 @@ def startPing():
     while True:
 
         PING_STATUS = False
+        print("[INFO] SLEEPING 60 SECONDS!")
         for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
         sleep(20)
-        print("[INFO] SLEEPING 60 SECONDS!")
         if PING_STATUS:
             print("[INFO] RESTART ETH!")
             restartEth()
@@ -68,7 +68,7 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
 
             fail = open(f"/root/check_test/{ip}_state", "w")
             countLoss += 1
-
+            print(countLoss)
             fail.write(str(countLoss))
             fail.close()
 
