@@ -41,6 +41,8 @@ def startPing():
         for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
         sleep(20)
+        global PING_STATUS
+
         if PING_STATUS:
             print("[INFO] RESTART ETH!")
             restartEth()
