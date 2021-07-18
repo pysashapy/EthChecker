@@ -64,10 +64,10 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
             except:
                 countLoss = 0
+            print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss - {countLoss}")
 
             fail = open(f"/root/check_test/{ip}_state", "w")
             countLoss += 1
-            #print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss {countLoss}")
 
             fail.write(str(countLoss))
             fail.close()
@@ -79,13 +79,12 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
                 gmail.send_message('', ip)
                 os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
-            print(f"[INFO] command - ", command, f", loss - {loss}, count loss - {countLoss}")
 
         elif not ct and loss == 100:
             ping(ip, server, ct=True)
         else:
             try:
-                print(f"[INFO] command - ", command, f", loss - {loss}")
+                #print(f"[INFO] command - ", command, f", loss - {loss}")
                 os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
             except:
                 pass
@@ -135,6 +134,7 @@ class Send:
         self.closeSerial(serial_)
 
     def write(self, serial_: serial.Serial, data:str):
+        print(data)
         serial_.write(data.encode('utf-8'))
 
 
