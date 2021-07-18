@@ -67,7 +67,6 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss - {countLoss}")
 
             fail = open(f"/root/check_test/{ip}_state", "w")
-            countLoss += 1
             print(countLoss)
             fail.write(str(countLoss))
             fail.close()
