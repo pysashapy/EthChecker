@@ -42,8 +42,10 @@ def startPing():
             Thread(target=ping, args=(ip, )).start()
         sleep(20)
         global PING_STATUS
+        a = PING_STATUS
+        print(a)
 
-        if PING_STATUS:
+        if a:
             print("[INFO] RESTART ETH!")
             restartEth()
             sleep(20)
@@ -76,6 +78,8 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             if countLoss == 10:
                 global PING_STATUS
                 PING_STATUS = True
+                print(PING_STATUS)
+
             elif countLoss == 60:
                 gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
                 gmail.send_message('', ip)
