@@ -7,8 +7,11 @@ from threading import Thread
 import platform
 import smtplib
 
+PING_STATUS = False
+
 
 def startPing():
+    global PING_STATUS
     IPs = ['192.168.11.100',
         '192.168.12.100',
         '192.168.13.100',
@@ -35,7 +38,7 @@ def startPing():
     except:
         pass
     while True:
-
+        global PING_STATUS
         PING_STATUS = False
         print("[INFO] SLEEPING 60 SECONDS!")
         for ip in IPs:
