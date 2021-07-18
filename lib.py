@@ -44,7 +44,6 @@ def startPing():
         for ip in IPs:
             Thread(target=ping, args=(ip, )).start()
         sleep(20)
-        print(PING_STATUS)
 
         if PING_STATUS:
             print("[INFO] RESTART ETH!")
@@ -78,7 +77,6 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             if countLoss == 10:
                 global PING_STATUS
                 PING_STATUS = True
-                print(PING_STATUS)
 
             elif countLoss == 60:
                 gmail = Gmail('vivereecombattere@gmail.com', '8d4cfaadd')
@@ -139,7 +137,6 @@ class Send:
         self.closeSerial(serial_)
 
     def write(self, serial_: serial.Serial, data:str):
-        print(data)
         serial_.write(data.encode('utf-8'))
 
 
