@@ -66,11 +66,10 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
                 countLoss = int(open(f"/root/check_test/{ip}_state", "r").read())
             except:
                 countLoss = 0
+            countLoss += 1
             print(f"[INFO] command - ", command, f", loss - {loss}", f", count Loss - {countLoss}")
-
             fail = open(f"/root/check_test/{ip}_state", "w")
             fail.write(str(countLoss))
-            print(countLoss, str(countLoss))
             fail.close()
 
             if countLoss == 10:
