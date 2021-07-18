@@ -87,7 +87,7 @@ def ping(ip, server='1.1.1.1', count=3, ct=False):
             ping(ip, server, ct=True)
         else:
             try:
-                #print(f"[INFO] command - ", command, f", loss - {loss}")
+                print(f"[INFO] command - ", command, f", loss - {loss}")
                 os.remove(os.path.join("/root/check_test/", f"{ip}_state"))
             except:
                 pass
